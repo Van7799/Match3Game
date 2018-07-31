@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/Scenes/Scene_for_veribles.unity
+  isLoaded: 1
+  isActive: 1

@@ -1,0 +1,84 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Empty_GO : MonoBehaviour {
+    float speed = 1.0f;
+    bool move;
+    public static GameObject goWall;
+    public GameObject goBlue;
+    public GameObject goGreen;
+    public GameObject goOrange;
+    public GameObject goRed;
+    public GameObject goViolet;
+
+    GameObject go_above;
+
+    // Use this for initialization
+    void Start () {
+        move = true;
+    }
+	
+	// Update is called once per frame
+	void Update () {
+        try
+        {
+            go_above = GameObject.Find(transform.position.x + "_" + (transform.position.y + 1));
+            if (go_above.tag == "wall")
+            {
+                CreateGO((int)transform.position.x, (int)transform.position.y);
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                //    Debug.Log(go.transform.position.x + "" + go.transform.position.y);
+                //     go.transform.position = new Vector3(transform.position.x, transform.position.y, 0.0f);
+                //   go.name = transform.position.x + "_" + transform.position.y;
+
+                Vector3 current = new Vector3(go_above.transform.position.x, go_above.transform.position.y, 0.0f);
+                Vector3 target = this.transform.position;
+                go_above.transform.position = Vector3.MoveTowards(current, target, speed * Time.deltaTime);
+             
+                if (current == target)
+                {
+                    move = false;
+                    transform.position = new Vector3Int((int)go_above.transform.position.x, (int)go_above.transform.position.y + 1, 0);
+                    go_above.name = go_above.transform.position.x + "_" + go_above.transform.position.y;
+                    
+                }
+            }
+            }
+         catch
+         {
+             move = false;
+         }
+	}
+
+
+
+    /// create random gameobject
+    public void CreateGO(int x, int y)
+    {
+        int rand = Random.Range(0, 5);
+        Random.seed = (int)System.DateTime.Now.Millisecond;
+        GameObject goo = Instantiate(chooseGO(rand), new Vector3Int(x, y, 0), Quaternion.identity);
+        goo.name = x + "_" + y;
+    }
+    public GameObject chooseGO(int i)
+    {
+        GameObject go = goViolet;
+        if (i == 0) go = goBlue;
+        else
+        if (i == 1) go = goGreen;
+        else
+        if (i == 2) go = goOrange;
+        else
+        if (i == 3) go = goRed;
+        return go;
+    }
+
+    ////////////
+
+
+
+}
